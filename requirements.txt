@@ -1,0 +1,8 @@
+numpy==1.24.1
+Cython==0.29.26
+wget==3.2
+requests==2.27.1
+pyyaml==6.0
+scipy==1.10.1
+matplotlib==3.7.1
+networkx==3.1
