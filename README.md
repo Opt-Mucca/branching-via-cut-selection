@@ -2,11 +2,35 @@
 
 If this software was used for academic purposes, please cite our paper with the below information:
 
-`insert here`
+`@article{turner2023branching,
+  title={Branching via Cutting Plane Selection: Improving Hybrid Branching},
+  author={Turner, Mark and Berthold, Timo and Besan{\c{c}}on, Mathieu and Koch, Thorsten},
+  journal={arXiv preprint arXiv:2306.06050},
+  year={2023}
+}`
 
 If the instances from ```generate_snd_lib_instances``` were used, then please cite with below information:
 
-`insert here`
+`@misc{zenodo_sndlib,
+  author={Turner, Mark and Berthold, Timo and Besançon, Mathieu and Koch, Thorsten},
+  title={{SNDlib-MIPs: A new set of homogeneous MILP instances}},
+  month=jun,
+  year=2023,
+  publisher={Zenodo},
+  doi={10.5281/zenodo.8021237},
+  url={https://doi.org/10.5281/zenodo.8021237}
+}`
+
+`@article{sndlib,
+  title={SNDlib 1.0—Survivable network design library},
+  author={Orlowski, Sebastian and Wess{\"a}ly, Roland and Pi{\'o}ro, Michal and Tomaszewski, Artur},
+  journal={Networks: An International Journal},
+  volume={55},
+  number={3},
+  pages={276--286},
+  year={2010},
+  publisher={Wiley Online Library}
+}`
 
 ## Install Guide
 Requirements: Python 3.9 / Debian 11 (Also tested with Python 3.8 and 3.11 and Ubuntu 20.04).
