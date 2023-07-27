@@ -173,7 +173,7 @@ if __name__ == "__main__":
     parser.add_argument('efficacy', type=float)
     parser.add_argument('obj_parallelism', type=float)
     parser.add_argument('avg_gmi_eff_weight', type=float)
-    parser.add_argument('avg_instead_of_last_gmi', type_str_to_bool)
+    parser.add_argument('avg_instead_of_last_gmi', type=str_to_bool)
     args = parser.parse_args()
 
     # Check if the solution file exists
