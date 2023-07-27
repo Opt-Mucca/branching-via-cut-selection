@@ -12,7 +12,7 @@ import parameters
 
 def build_scip_model(instance_path, node_lim, rand_seed, pre_solve, propagation, separators, heuristics,
                      permutation_seed=0, time_limit=None, sol_path=None, branch_option='gomory',
-                     efficacy=1.0, obj_parallelism=0.0, avg_gmi_eff_weight=0.05):
+                     efficacy=1.0, obj_parallelism=0.0, avg_gmi_eff_weight=0.05, avg_instead_of_last_gmi=False):
     """
     General function to construct a PySCIPOpt model.
     Args:
@@ -30,6 +30,7 @@ def build_scip_model(instance_path, node_lim, rand_seed, pre_solve, propagation,
         efficacy: The efficacy weight that is applied to the GMI branching rule if employed
         obj_parallelism: The objective parallelism weight that is applied to the GMI branching rule if employed
         avg_gmi_eff_weight: The weight given to gmiavgeffweight in the relpscost branching rule
+        avg_instead_of_last_gmi: Whether avg eff of computed GMI cuts should be used instead of just the last computed cut
     Returns:
         pyscipopt model
     """
@@ -97,7 +98,15 @@ def build_scip_model(instance_path, node_lim, rand_seed, pre_solve, propagation,
 
     # If the branching option is relpscost then set other user parameters
     if 'relpscost' in branch_option and 'gomory' not in branch_option:
-        scip.setParam('branching/relpscost/gmiavgeffweight', avg_gmi_eff_weight)
+        if avg_instead_of_last_gmi:
+            scip.setParam('branching/relpscost/gmiavgeffweight', avg_gmi_eff_weight)
+            scip.setParam('branching/relpscost/gmilasteffweight', 0.0)
+        else:
+            scip.setParam('branching/relpscost/gmiavgeffweight', 0.0)
+            scip.setParam('branching/relpscost/gmilasteffweight', avg_gmi_eff_weight)
+    else:
+        scip.setParam('branching/relpscost/gmiavgeffweight', 0.0)
+        scip.setParam('branching/relpscost/gmilasteffweight', 0.0)
 
     # Read in the problem
     scip.readProblem(instance_path)

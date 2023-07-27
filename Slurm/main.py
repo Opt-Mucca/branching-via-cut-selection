@@ -6,7 +6,7 @@ from utilities import is_dir, is_file, str_to_bool, run_python_slurm_job, get_fi
 import parameters
 
 
-def run_instances(instance_dir, solution_dir, results_dir, outfile_dir, print_stats):
+def run_instances(instance_dir, solution_dir, results_dir, outfile_dir, print_stats, avg_instead_of_last_gmi):
     """
     The main function for issuing all individual solve calls.
     Args:
@@ -15,6 +15,7 @@ def run_instances(instance_dir, solution_dir, results_dir, outfile_dir, print_st
         results_dir (dir): The directory where all result files will be dumped
         outfile_dir (dir): The directory where all out files will be dumped
         print_stats (bool): Whether a stats file should be output from each solve call
+        avg_instead_of_last_gmi (bool): Whether average eff of GMI cuts should be used instead of eff of the last computed cut
     Returns:
         Nothing at all. This is the main function call and it will just produce all appropriate run files
     """
@@ -74,7 +75,7 @@ def run_instances(instance_dir, solution_dir, results_dir, outfile_dir, print_st
                                               arg_list=[branch_results_dir, instance_path, instance, rand_seed,
                                                         permutation_seed, parameters.TIME_LIMIT, print_stats,
                                                         solution_path, branch_option, efficacy, obj_parallelism,
-                                                        avg_gmi_eff_weight]
+                                                        avg_gmi_eff_weight, avg_instead_of_last_gmi]
                                               )
                     slurm_job_ids.append(ji)
                     time.sleep(0.01)
@@ -99,6 +100,7 @@ if __name__ == "__main__":
     parser.add_argument('results_dir', type=is_dir)
     parser.add_argument('outfile_dir', type=is_dir)
     parser.add_argument('print_stats', type=str_to_bool)
+    parser.add_argument('avg_instead_of_last_gmi', type=str_to_bool)
     args = parser.parse_args()
 
     # Change the solution directory to None if not provided
@@ -107,4 +109,4 @@ if __name__ == "__main__":
     else:
         args.solution_dir = None
 
-    run_instances(args.instance_dir, args.solution_dir, args.results_dir, args.outfile_dir, args.print_stats)
+    run_instances(args.instance_dir, args.solution_dir, args.results_dir, args.outfile_dir, args.print_stats, args.avg_instead_of_last_gmi)

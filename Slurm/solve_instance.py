@@ -8,7 +8,7 @@ import parameters
 
 def run_instance(results_dir, instance_path, instance, rand_seed, permutation_seed, time_limit, print_stats,
                  solution_path=None, branch_option='gomory', efficacy=1.0, obj_parallelism=0.0,
-                 avg_gmi_eff_weight=0.0):
+                 avg_gmi_eff_weight=0.0, avg_instead_of_last_gmi=False):
     """
     The call to solve a single instance. A model will be created and an instance file (and potentially solution file)
     loaded in. Appropriate settings as defined by this function call are then set and the model solved.
@@ -28,6 +28,7 @@ def run_instance(results_dir, instance_path, instance, rand_seed, permutation_se
         efficacy: Efficacy weight
         obj_parallelism: Objective parallelism weight
         avg_gmi_eff_weight: The weight given to gmiavgeffweight in the relpscost branching rule
+        avg_instead_of_last_gmi: Whether average efficacy of computed GMI cuts should be used instead of just the last computed cut
     Returns:
         Nothing. All results from this run should be output to a file in results_dir.
         The results should contain all information about the run, (e.g. solve_time, dual_bound etc)
@@ -52,7 +53,8 @@ def run_instance(results_dir, instance_path, instance, rand_seed, permutation_se
     scip = build_scip_model(instance_path, node_lim, rand_seed, True, True, True, True,
                             permutation_seed, time_limit=time_limit, sol_path=solution_path,
                             branch_option=branch_option, efficacy=efficacy,
-                            obj_parallelism=obj_parallelism, avg_gmi_eff_weight=avg_gmi_eff_weight)
+                            obj_parallelism=obj_parallelism, avg_gmi_eff_weight=avg_gmi_eff_weight,
+                            avg_instead_of_last_gmi=avg_instead_of_last_gmi)
 
     # Solve the SCIP model and extract all solve information
     solve_model_and_extract_solve_info(scip, rand_seed, permutation_seed, instance, results_dir,
@@ -171,6 +173,7 @@ if __name__ == "__main__":
     parser.add_argument('efficacy', type=float)
     parser.add_argument('obj_parallelism', type=float)
     parser.add_argument('avg_gmi_eff_weight', type=float)
+    parser.add_argument('avg_instead_of_last_gmi', type_str_to_bool)
     args = parser.parse_args()
 
     # Check if the solution file exists
@@ -182,4 +185,4 @@ if __name__ == "__main__":
     # The main function call to run a SCIP instance with cut-sel params
     run_instance(args.results_dir, args.instance_path, args.instance, args.rand_seed, args.permutation_seed,
                  args.time_limit, args.print_stats, args.solution_path, args.branch_option, args.efficacy,
-                 args.obj_parallelism, args.avg_gmi_eff_weight)
+                 args.obj_parallelism, args.avg_gmi_eff_weight, args.avg_instead_of_last_gmi)
